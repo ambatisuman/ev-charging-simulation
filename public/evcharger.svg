@@ -1,0 +1,67 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  width="64"
+  height="64"
+  fill="none"
+>
+  <defs>
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#005F85" />
+      <stop offset="100%" stop-color="#003A4D" />
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#bgGradient)" stroke="#00A4EF" stroke-width="2" />
+  <rect
+    x="20"
+    y="14"
+    width="24"
+    height="36"
+    rx="4"
+    fill="#FFFFFF"
+    stroke="#0078D4"
+    stroke-width="2"
+    filter="url(#boxShadow)"
+  />
+  <path
+    d="M32 50 Q32 55, 36 58 Q40 60, 44 58"
+    stroke="#00A4EF"
+    stroke-width="3"
+    fill="none"
+    stroke-linecap="round"
+    filter="url(#cableShadow)"
+  />
+  <circle cx="44" cy="58" r="3.5" fill="#00A4EF" stroke="#E6F7FF" stroke-width="2" />
+  <rect
+    x="24"
+    y="18"
+    width="16"
+    height="10"
+    rx="1"
+    fill="#0078D4"
+    filter="url(#innerShadow)"
+  />
+  <path
+    d="M28 40 H36 V42 C36 43.1 35.1 44 34 44 H30 C28.9 44 28 43.1 28 42 V40 Z"
+    fill="#0078D4"
+    stroke="#E6F7FF"
+    stroke-width="2"
+  />
+  <path
+    d="M30 38 V40 M34 38 V40"
+    stroke="#FFFFFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <defs>
+    <filter id="boxShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.2" />
+    </filter>
+    <filter id="cableShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+    <filter id="innerShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
+  </defs>
+</svg>

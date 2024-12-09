@@ -1,5 +1,5 @@
 import React from "react";
-import EVChargingSimulation from "./screens/EVChargingSimulation";
+import EVChargingSimulation from "./views/EVChargingSimulation";
 
 const App: React.FC = () => {
   return (

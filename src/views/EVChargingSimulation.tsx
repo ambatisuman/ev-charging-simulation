@@ -1,28 +1,6 @@
-import React, { useState, useMemo } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-} from "recharts";
+import React, { useState } from "react";
 import { Card } from "../components/Card";
-
-interface HourlyData {
-  hour: string;
-  power: number;
-}
-
-interface WeeklyData {
-  day: string;
-  events: number;
-  energy: number;
-}
+import EVChargingCalculator from "../components/EVChargingCalculator";
 
 interface FormData {
   chargePoints: number;
@@ -47,50 +25,6 @@ const EVChargingSimulation: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-
-  // Summary statistics simulation data
-  const summaryStats = useMemo(() => {
-    const chargingEventsPerDay = Math.floor(
-      formData.chargePoints *
-        (formData.arrivalMultiplier / 100) *
-        (24 / (formData.consumption / formData.chargingPower))
-    );
-    const totalChargingEvents = chargingEventsPerDay * 7;
-
-    // total energy charged per week
-    const energyPerCharge = formData.consumption;
-    const totalEnergyCharged = totalChargingEvents * energyPerCharge;
-
-    // calculating peak power demand
-    const peakPowerDemand = Math.min(
-      formData.chargePoints * formData.chargingPower,
-      180 // limiting to 180 kW to maintain consistency with original chart
-    );
-
-    return {
-      totalEnergyCharged: Math.round(totalEnergyCharged),
-      peakPowerDemand: Math.round(peakPowerDemand),
-      totalChargingEvents: Math.round(totalChargingEvents),
-    };
-  }, [formData]);
-
-  // Sample data for chart visualizations
-  const hourlyData: HourlyData[] = Array.from({ length: 12 }, (_, i) => {
-    const hour = i * 2;
-    return {
-      hour: `${hour}:00`,
-      power: Math.min(
-        180,
-        Math.random() * (hour < 8 ? 50 : hour < 20 ? 150 : 80) + 20
-      ),
-    };
-  });
-
-  const weeklyData: WeeklyData[] = Array.from({ length: 7 }, (_, i) => ({
-    day: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][i],
-    events: Math.floor(summaryStats.totalChargingEvents / 7),
-    energy: Math.floor(summaryStats.totalEnergyCharged / 7),
-  }));
 
   // Form validation
   const validateForm = (data: FormData): FormErrors => {
@@ -223,82 +157,13 @@ const EVChargingSimulation: React.FC = () => {
         </form>
       </Card>
 
-      {/* Daily power usage chart */}
-      <Card>
-        <h2 className='text-xl font-semibold mb-4'>Daily Power Usage</h2>
-        <div className='h-64'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <LineChart data={hourlyData}>
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='hour' />
-              <YAxis unit='kW' />
-              <Tooltip />
-              <Legend />
-              <Line
-                type='monotone'
-                dataKey='power'
-                stroke='#3b82f6'
-                name='Power Demand'
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </Card>
-
-      {/* Weekly power usage visualization */}
-      <Card>
-        <h2 className='text-xl font-semibold mb-4'>Weekly Overview</h2>
-        <div className='h-64'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <BarChart data={weeklyData}>
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='day' />
-              <YAxis yAxisId='left' />
-              <YAxis yAxisId='right' orientation='right' />
-              <Tooltip />
-              <Legend />
-              <Bar
-                yAxisId='left'
-                dataKey='events'
-                fill='#007BFF'
-                name='Charging Events'
-              />
-              <Bar
-                yAxisId='right'
-                dataKey='energy'
-                fill='#10b981'
-                name='Energy Consumed (kWh)'
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </Card>
-
-      {/* Summary statistics */}
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-        <Card>
-          <h3 className='text-lg font-semibold mb-2'>Total Energy Charged</h3>
-          <p className='text-3xl font-bold'>
-            {summaryStats.totalEnergyCharged.toLocaleString()} kWh
-          </p>
-          <p className='text-sm text-gray-500'>Last 7 days</p>
-        </Card>
-
-        <Card>
-          <h3 className='text-lg font-semibold mb-2'>Peak Power Demand</h3>
-          <p className='text-3xl font-bold'>
-            {summaryStats.peakPowerDemand} kW
-          </p>
-          <p className='text-sm text-gray-500'>Maximum this week</p>
-        </Card>
-
-        <Card>
-          <h3 className='text-lg font-semibold mb-2'>Charging Events</h3>
-          <p className='text-3xl font-bold'>
-            {summaryStats.totalChargingEvents}
-          </p>
-          <p className='text-sm text-gray-500'>Total this week</p>
-        </Card>
+      <div>
+        <EVChargingCalculator
+          chargePoints={formData.chargePoints}
+          arrivalMultiplier={formData.arrivalMultiplier}
+          consumption={formData.consumption}
+          chargingPower={formData.chargingPower}
+        />
       </div>
     </div>
   );
